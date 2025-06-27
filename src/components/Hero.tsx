@@ -2,11 +2,24 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Leaf, Shield, Truck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
     <section className="relative bg-gradient-to-br from-green-50 via-white to-emerald-50 overflow-hidden">
-      <div className="container mx-auto px-4 py-16 lg:py-24">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          className="w-full h-full object-cover opacity-10"
+        >
+          <source src="https://player.vimeo.com/external/451735190.sd.mp4?s=2a1c5e1f8e4a5c1e8e4a5c1e8e4a5c1e8e4a5c1e&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
+        </video>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 lg:py-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8 animate-fade-in">
@@ -26,9 +39,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg">
-                Shop Now
-                <ArrowRight className="ml-2 w-5 h-5" />
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg" asChild>
+                <Link to="/products">
+                  Shop Now
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
               </Button>
               <Button variant="outline" size="lg" className="border-green-600 text-green-600 hover:bg-green-50 px-8 py-4 text-lg">
                 Learn More
