@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,54 +6,12 @@ import { Input } from '@/components/ui/input';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
+import { useCart } from '@/contexts/CartContext';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Fresh Organic Spinach",
-      price: 25,
-      quantity: 2,
-      unit: "250g",
-      image: "https://images.unsplash.com/photo-1576045057995-568f588f8110?auto=format&fit=crop&w=200&q=80",
-      organic: true
-    },
-    {
-      id: 2,
-      name: "Farm Fresh Tomatoes",
-      price: 40,
-      quantity: 1,
-      unit: "1kg",
-      image: "https://images.unsplash.com/photo-1546470427-e9821e4e3cb8?auto=format&fit=crop&w=200&q=80",
-      organic: false
-    },
-    {
-      id: 3,
-      name: "Organic Carrots",
-      price: 35,
-      quantity: 3,
-      unit: "500g",
-      image: "https://images.unsplash.com/photo-1445282768818-728615cc4c17?auto=format&fit=crop&w=200&q=80",
-      organic: true
-    }
-  ]);
-
+  const { cartItems, updateQuantity, removeFromCart, getTotalPrice } = useCart();
   const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
-
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity === 0) {
-      setCartItems(cartItems.filter(item => item.id !== id));
-    } else {
-      setCartItems(cartItems.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ));
-    }
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
 
   const applyCoupon = () => {
     if (couponCode === 'FRESH10') {
@@ -64,7 +21,7 @@ const Cart = () => {
     }
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = getTotalPrice();
   const deliveryFee = subtotal > 500 ? 0 : 40;
   const discount = appliedCoupon 
     ? appliedCoupon.type === 'percentage' 
@@ -155,7 +112,7 @@ const Cart = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.id)}
                           className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-4 h-4" />
